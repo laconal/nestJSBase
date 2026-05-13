@@ -1,0 +1,43 @@
+// Receive logs pushed from pino-loki (Loki push API compatible)
+loki.source.api "nestjs_receiver" {
+  http {
+    listen_address = "0.0.0.0"
+    listen_port    = 3100
+  }
+
+  // Enrich with extra labels at the Alloy layer
+  labels = {
+    environment = "production",
+    service     = "nestjs-app",
+  }
+
+  forward_to = [loki.process.parse_pino.receiver]
+}
+
+// Parse the JSON pino payload and promote level as a stream label
+loki.process "parse_pino" {
+  // Extract fields from the JSON log line
+  stage.json {
+    expressions = {
+      level        = "level",
+      request_id   = "req.id",
+      status_code  = "res.statusCode",
+    }
+  }
+
+  // Promote log level to a Loki stream label (enables log-level filtering in Grafana)
+  stage.labels {
+    values = {
+      level = "",
+    }
+  }
+
+  forward_to = [loki.write.loki_backend.receiver]
+}
+
+// Write to Loki
+loki.write "loki_backend" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

@@ -1,0 +1,13 @@
+export const NAME_MIN_LENGTH = 3
+export const NAME_MAX_LENGTH = 128
+export const FIRSTNAME_MIN_LENGTH = 1
+export const FIRSTNAME_MAX_LENGTH = 128
+export const LASTNAME_MIN_LENGTH = 1
+export const LASTNAME_MAX_LENGTH = 128
+export const MIDDLENAME_MIN_LENGTH = 1
+export const MIDDLENAME_MAX_LENGTH = 128
+export const LOGIN_MIN_LENGTH: number = 3
+export const LOGIN_MAX_LENGTH: number = 128
+export const PASSWORD_MIN_LENGTH = 6
+export const DESCRIPTION_MAX_LENGTH = 1024
+export const USER_TYPES = ["internal", "external", "patient"] as const
