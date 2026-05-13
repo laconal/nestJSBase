@@ -1,3 +1,8 @@
+Base NestJS project, with PostgreSQL, Loki (via Grafana Alloy), Prometheus and Grafana
+with nest REST API:
+
+Users, Roles, Permissions and Many-To-Many user-roles
+
 1. create and edit .env
 
 2. generate private and public access keys for JWT:
@@ -23,4 +28,5 @@
 7. Run
 `pnpm run dev`
 
-
+8. Access to REST API
+`http://localhost:3000/api/v1/`
