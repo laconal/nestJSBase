@@ -83,18 +83,12 @@ export class UserRepository implements UserRepositoryInterface {
     }
 
     async update(data: UpdateUserInterface) {
-        const updateData: Partial<typeof UserModel.$inferInsert> = {}
-        if (data.passwordHash !== undefined) updateData.passwordHash = data.passwordHash
-        if (data.firstName !== undefined) updateData.firstName = data.firstName
-        if (data.lastName !== undefined) updateData.lastName = data.lastName
-        if (data.middleName !== undefined) updateData.middleName = data.middleName
-        if (data.pinfl !== undefined) updateData.pinfl = data.pinfl
-        if (data.type !== undefined) updateData.type = data.type
+        const { id, ...updateFields } = data;
 
         const [result] = await this.postgresDB.update(UserModel)
-            .set(updateData).where(eq(UserModel.id, data.id)).returning()
+            .set(updateFields).where(eq(UserModel.id, data.id)).returning()
 
-        return UserMapper.toDomain(result)
+        return result ? UserMapper.toDomain(result) : null
     }
 
     async delete(data: DeleteUserInterface) {

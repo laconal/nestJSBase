@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../infrastructure/persistence/postgres/user-repository/user.repository';
-import { AssignRevokeRoleDTO } from '../../api/dtos/user-role-dto/user-role.dto';
 import { AssignRevokePermissionDTO } from '../../api/dtos/permission-dto/permission.dto';
 
 @Injectable()

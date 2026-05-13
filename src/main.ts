@@ -2,7 +2,7 @@ import "./instrument"
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify"
+import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify"
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from '@fastify/cookie';
 import { PostgresExceptionFilter } from './core/filters/postgres-exceptions.filter';

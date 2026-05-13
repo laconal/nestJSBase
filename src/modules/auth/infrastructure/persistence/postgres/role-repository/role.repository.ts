@@ -31,14 +31,9 @@ export class RoleRepository implements RoleRepositoryInterface {
     }
 
     async update(data: UpdateRoleInterface) {
-        const updateData: Partial<typeof RoleModel.$inferInsert> = {}
-
-        if (data.name !== undefined) updateData.name = data.name
-        if (data.description !== undefined) updateData.description = data.description
-        if (data.permissions !== undefined) updateData.permissions = data.permissions
-
+        const { id, ...updateFields } = data;
         const [result] = await this.postgresDB.update(RoleModel)
-            .set(updateData).where(eq(RoleModel.id, data.id)).returning()
+            .set(updateFields).where(eq(RoleModel.id, data.id)).returning()
         return result ? RoleMapper.toDomain(result) : null
     }
 

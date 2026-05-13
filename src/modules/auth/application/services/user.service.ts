@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { hashPassword } from 'src/core/utils/passwordHandler';
+import { hashPassword } from 'src/modules/auth/infrastructure/auth/passwordHandler';
 import { UserRepository } from '../../infrastructure/persistence/postgres/user-repository/user.repository';
 import { CreateUserInterface, GetUsersInterface, UpdateUserInterface } from '../../domain/interfaces/user.repository.interface';
 import { validateQueryString } from 'src/core/utils/validateQueryString';

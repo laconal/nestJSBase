@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDTO } from '../../api/dtos/auth-dtos/login.dto';
-import { hashPassword, verifyPassword } from 'src/core/utils/passwordHandler';
+import { PasswordHandler } from '../../infrastructure/auth/passwordHandler';
 import { UserRepository } from '../../infrastructure/persistence/postgres/user-repository/user.repository';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { JwtPayload, TokenService } from './token.service';
@@ -11,6 +11,7 @@ export class AuthService {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly tokenService: TokenService,
+        private readonly passwordHandler: PasswordHandler
     ) {}
 
     async login(data: LoginDTO, reply: FastifyReply): Promise<void> {
@@ -18,7 +19,7 @@ export class AuthService {
         if (!hashedPassword) {
             throw new UnauthorizedException('Invalid credentials');
         }
-        const isValid = await verifyPassword(hashedPassword, data.password);
+        const isValid = await this.passwordHandler.verifyPassword(hashedPassword, data.password);
         if (!isValid) {
             throw new UnauthorizedException('Invalid credentials');
         }
@@ -51,10 +52,10 @@ export class AuthService {
         const hashedPassword = await this.userRepository.getPassword(payload.login)
         if(!hashedPassword) throw new UnauthorizedException("Invalid credentials")
 
-        const isValid = await verifyPassword(hashedPassword, data.oldPassword)
+        const isValid = await this.passwordHandler.verifyPassword(hashedPassword, data.oldPassword)
         if (!isValid) throw new UnauthorizedException("Invalid credentials")
 
-        const newHash = await hashPassword(data.newPassword)
+        const newHash = await this.passwordHandler.hashPassword(data.newPassword)
         await this.userRepository.update({
             id: payload.id,
             passwordHash: newHash
